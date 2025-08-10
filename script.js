@@ -101,7 +101,7 @@
     const message = qs('#message')?.value?.trim();
 
     const lines = [
-      'Hello ContractorCo, I\'d like a quote.',
+      'Hello ESG Land Services, I\'d like a quote.',
       name ? `Name: ${name}` : null,
       email ? `Email: ${email}` : null,
       phone ? `Phone: ${phone}` : null,
