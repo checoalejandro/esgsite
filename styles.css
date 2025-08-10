@@ -96,7 +96,7 @@ p { margin: 0 0 1rem; color: var(--muted); }
 /* Carousel replaces .hero-svg */
 .hero-carousel { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; background: #0a0a0a; box-shadow: 0 10px 30px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.08) inset; }
 .hero-carousel::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: inset 0 0 0 6px rgba(0,0,0,.85), inset 0 0 40px rgba(0,0,0,.6); }
-.hero-carousel .slide { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s ease; object-fit: cover; filter: saturate(105%) contrast(1.03); }
+.hero-carousel .slide { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s ease; object-fit: cover; object-position: center; filter: saturate(105%) contrast(1.03); }
 .hero-carousel .slide.active { opacity: 1; }
 .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
 .hero-stats div { text-align: center; padding: 10px 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; }
