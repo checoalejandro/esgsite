@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page Not Found — ContractorCo</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { display: grid; place-items: center; min-height: 100dvh; }
+    .wrap { text-align: center; padding: 28px; max-width: 720px; }
+    h1 { font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem); }
+    .actions { justify-content: center; margin-top: 16px; }
+    .code { font-weight: 800; color: var(--primary-2); letter-spacing: .06em; }
+  </style>
+</head>
+<body>
+  <main class="wrap" data-glass>
+    <a class="brand" href="./" aria-label="Go home">
+      <span class="brand-mark has-logo" aria-hidden="true"><img class="brand-logo" src="logo-mock.svg" alt=""></span>
+      <span class="brand-text">Contractor<span>Co</span></span>
+    </a>
+    <h1>Oops — page not found <span class="code">(404)</span></h1>
+    <p class="muted">The page you’re looking for doesn’t exist or might have moved. We’ll guide you back to the homepage.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="./">Go to homepage</a>
+      <a class="btn btn-outline" href="#" id="back">Go back</a>
+    </div>
+  </main>
+
+  <script>
+    // GitHub Pages smart redirect: send to repo root or user root
+    (function() {
+      var path = window.location.pathname.split('/');
+      if (path.length > 2 && path[1]) {
+        // likely project page: /USER/REPO/... → /USER/REPO/
+        var root = '/' + path.slice(1, 3).join('/') + '/';
+        if (document.referrer === '' || !document.referrer.includes(window.location.host)) {
+          setTimeout(function(){ window.location.replace(root); }, 600);
+        }
+      } else {
+        // likely user/org page → '/'
+        if (document.referrer === '' || !document.referrer.includes(window.location.host)) {
+          setTimeout(function(){ window.location.replace('/'); }, 600);
+        }
+      }
+      var back = document.getElementById('back');
+      if (back) back.addEventListener('click', function(e){ e.preventDefault(); history.back(); });
+    })();
+  </script>
+</body>
+</html>
