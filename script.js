@@ -173,9 +173,15 @@
     updateWAHref();
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      updateWAHref();
-      // Simple non-intrusive feedback
-      showToast('Demo: form is front-end only. WhatsApp link updated.');
+      // Build message and open WhatsApp with the current form content
+      const text = buildWAMessage();
+      const url = `https://wa.me/${waPhone}?text=${text}`;
+      // Open in a new tab/window to mirror the WhatsApp CTA behavior
+      const win = window.open(url, '_blank', 'noopener');
+      // If popup was blocked, fall back to setting location
+      if (!win) {
+        window.location.href = url;
+      }
     });
   }
 
