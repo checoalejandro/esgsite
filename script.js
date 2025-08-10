@@ -82,6 +82,57 @@
     reveals.forEach(el => el.classList.add('in-view'));
   }
 
+  // Hero carousel (fades between images from window.HERO_IMAGES)
+  (function initHeroCarousel() {
+    const container = qs('.hero-carousel');
+    const list = Array.isArray(window.HERO_IMAGES) ? window.HERO_IMAGES.filter(Boolean) : [];
+    if (!container || !list.length) return;
+
+    const slides = [];
+    let idx = 0;
+    let timer;
+
+    const setActive = (i) => {
+      slides.forEach((img, n) => img.classList.toggle('active', n === i));
+    };
+
+    const start = () => {
+      if (prefersReduced || slides.length <= 1) { setActive(0); return; }
+      clearInterval(timer);
+      timer = setInterval(() => {
+        idx = (idx + 1) % slides.length;
+        setActive(idx);
+      }, 4000);
+    };
+
+    // Preload and append images
+    let pending = list.length;
+    list.forEach((src, i) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.loading = 'eager';
+      img.className = 'slide';
+      img.alt = 'Project photo ' + (i + 1);
+      img.onload = () => {
+        container.appendChild(img);
+        slides.push(img);
+        pending -= 1;
+        if (pending === 0 && slides.length) { setActive(0); start(); }
+      };
+      img.onerror = () => {
+        pending -= 1;
+        if (pending === 0 && slides.length) { setActive(0); start(); }
+      };
+      img.src = src;
+    });
+
+    // Pause on hover (desktop)
+    container.addEventListener('mouseenter', () => { if (!prefersReduced) clearInterval(timer); });
+    container.addEventListener('mouseleave', () => { if (!prefersReduced) start(); });
+
+    // Stop animation when user prefers reduced motion (already handled by start())
+  })();
+
   // Back to top
   if (toTop) {
     toTop.addEventListener('click', () => {
