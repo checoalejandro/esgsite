@@ -163,6 +163,7 @@
     const track = qs('.gallery-track');
     const prevBtn = qs('.gallery-arrow.prev');
     const nextBtn = qs('.gallery-arrow.next');
+    const fsBtn = qs('.gallery-fullscreen');
     const list = Array.isArray(window.GALLERY_IMAGES) && window.GALLERY_IMAGES.length
       ? window.GALLERY_IMAGES
       : (Array.isArray(window.HERO_IMAGES) ? window.HERO_IMAGES : []);
@@ -225,6 +226,43 @@
       }
     }, { passive: true });
     viewport.addEventListener('touchend', () => { swiping = false; }, { passive: true });
+
+    // Fullscreen support
+    const isFullscreen = () => (document.fullscreenElement === viewport) || (document.webkitFullscreenElement === viewport);
+    const canFullscreen = !!(viewport.requestFullscreen || viewport.webkitRequestFullscreen);
+
+    const updateFSUI = () => {
+      if (!fsBtn) return;
+      const on = isFullscreen();
+      fsBtn.setAttribute('aria-label', on ? 'Exit fullscreen' : 'Enter fullscreen');
+      fsBtn.title = on ? 'Exit fullscreen' : 'Enter fullscreen';
+      fsBtn.textContent = on ? '×' : '⛶';
+    };
+
+    const enterFS = () => {
+      if (viewport.requestFullscreen) viewport.requestFullscreen();
+      else if (viewport.webkitRequestFullscreen) viewport.webkitRequestFullscreen();
+    };
+    const exitFS = () => {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    };
+
+    if (fsBtn) {
+      updateFSUI();
+      fsBtn.addEventListener('click', () => {
+        if (!canFullscreen) {
+          // Fallback: open current image in a new tab
+          const curr = slides[idx];
+          if (curr && curr.src) window.open(curr.src, '_blank', 'noopener');
+          return;
+        }
+        if (isFullscreen()) exitFS(); else enterFS();
+      });
+
+      document.addEventListener('fullscreenchange', updateFSUI);
+      document.addEventListener('webkitfullscreenchange', updateFSUI);
+    }
 
     // Reduced motion: still use instant change but keep fade if allowed
     if (prefersReduced) {
