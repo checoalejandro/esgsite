@@ -3,6 +3,30 @@
   const qsa = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Intro overlay animation
+  const introEl = document.getElementById('intro');
+  if (introEl) {
+    const finishIntro = () => {
+      if (!introEl.classList.contains('done')) {
+        introEl.classList.add('done');
+        // Remove from DOM after transition
+        setTimeout(() => {
+          if (introEl && introEl.parentNode) {
+            introEl.parentNode.removeChild(introEl);
+          }
+        }, 800);
+      }
+    };
+    if (prefersReduced) {
+      finishIntro();
+    } else {
+      // Let the logo animate in, then fade out the overlay
+      setTimeout(finishIntro, 1400);
+      // Safety: ensure overlay never lingers beyond 4s
+      setTimeout(finishIntro, 4000);
+    }
+  }
+
   // Dynamic year
   const yearEl = qs('#year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -131,6 +155,81 @@
     container.addEventListener('mouseleave', () => { if (!prefersReduced) start(); });
 
     // Stop animation when user prefers reduced motion (already handled by start())
+  })();
+
+  // Gallery carousel (manual with arrows + touch, images from window.GALLERY_IMAGES or HERO_IMAGES)
+  (function initGallery() {
+    const viewport = qs('.gallery-viewport');
+    const track = qs('.gallery-track');
+    const prevBtn = qs('.gallery-arrow.prev');
+    const nextBtn = qs('.gallery-arrow.next');
+    const list = Array.isArray(window.GALLERY_IMAGES) && window.GALLERY_IMAGES.length
+      ? window.GALLERY_IMAGES
+      : (Array.isArray(window.HERO_IMAGES) ? window.HERO_IMAGES : []);
+    if (!viewport || !track || !list.length) return;
+
+    viewport.setAttribute('tabindex', '0');
+
+    const slides = [];
+    let idx = 0;
+
+    const setActive = (i) => {
+      slides.forEach((img, n) => img.classList.toggle('active', n === i));
+    };
+
+    // Build slides
+    list.forEach((src, i) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.loading = 'lazy';
+      img.className = 'slide';
+      img.alt = 'Gallery image ' + (i + 1);
+      img.src = src;
+      track.appendChild(img);
+      slides.push(img);
+    });
+    if (slides.length) setActive(0);
+
+    const go = (dir) => {
+      if (!slides.length) return;
+      idx = (idx + dir + slides.length) % slides.length;
+      setActive(idx);
+    };
+
+    if (prevBtn) prevBtn.addEventListener('click', () => go(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => go(1));
+
+    // Keyboard navigation
+    viewport.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+    });
+
+    // Touch swipe
+    let startX = 0, startY = 0, swiping = false;
+    const threshold = 40; // px
+    viewport.addEventListener('touchstart', (e) => {
+      if (!e.touches || !e.touches.length) return;
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY; swiping = true;
+    }, { passive: true });
+    viewport.addEventListener('touchmove', (e) => {
+      if (!swiping || !e.touches || !e.touches.length) return;
+      // allow natural scrolling, only act on mostly-horizontal gesture
+      const t = e.touches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > threshold) {
+        swiping = false;
+        if (dx > 0) go(-1); else go(1);
+      }
+    }, { passive: true });
+    viewport.addEventListener('touchend', () => { swiping = false; }, { passive: true });
+
+    // Reduced motion: still use instant change but keep fade if allowed
+    if (prefersReduced) {
+      slides.forEach(img => img.style.transition = 'none');
+    }
   })();
 
   // Back to top

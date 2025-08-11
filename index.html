@@ -79,6 +79,9 @@
     </script>
 </head>
 <body>
+<div id="intro" class="intro-overlay" aria-hidden="true">
+  <img src="logo.jpeg" alt="ESG Land Services logo" class="intro-logo">
+</div>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header" data-glass>
@@ -257,6 +260,21 @@
         </div>
     </section>
 
+    <section id="gallery" class="section gallery" aria-labelledby="gallery-title">
+        <div class="container">
+            <header class="section-head reveal">
+                <h2 id="gallery-title">Recent project photos</h2>
+            </header>
+            <div class="gallery-wrap reveal" data-glass>
+                <button class="gallery-arrow prev" aria-label="Previous image" type="button">‹</button>
+                <div class="gallery-viewport" role="region" aria-label="Project gallery">
+                    <div class="gallery-track"><!-- Slides injected by script.js --></div>
+                </div>
+                <button class="gallery-arrow next" aria-label="Next image" type="button">›</button>
+            </div>
+        </div>
+    </section>
+
     <section id="contact" class="section contact" aria-labelledby="contact-title">
         <div class="container">
             <header class="section-head reveal">
@@ -343,12 +361,38 @@
 <script>
 // Default hero images list. Add more filenames (relative to project root) as you place them into /images.
 window.HERO_IMAGES = [
+  'images/040e1ebe-3d53-418e-8107-49dfa5b00af7.jpg',
+  'images/04c53099-dfb1-41b9-997c-90e5ef60b275.jpg',
+  'images/09a2bd6b-316d-42ca-a484-cb8caa1537de.jpg',
+  'images/0b65c672-0d26-4837-bf81-7802bcb72bce.jpg',
+  'images/0d5ebdaa-4d22-4854-93e0-2f418fd33bfd.jpg',
+  'images/10cb8b78-8f3c-41fb-8b23-88a8a7b79d40.jpg',
+  'images/28b2fa56-1f4e-4de9-879b-a195718a4ba1.jpg',
+  'images/2c0ba97b-b729-4cd5-9988-833c5efde8a4.jpg',
+  'images/2c37ddb1-a84e-4d97-b251-0a789f2dde41.jpg',
   'images/474463191_122198364068222018_3986979817961091121_n.jpg',
   'images/475981785_596989216451469_1354976536708401938_n.jpg',
   'images/476930849_603976262419431_3336946873848117954_n.jpg',
   'images/482247399_624981800318877_5764504593034401175_n.jpg',
+  'images/4db0e22e-c881-446e-a292-95464abd67de.jpg',
+  'images/60d48555-7e51-457e-8136-7aa684633c9c.jpg',
+  'images/6310f689-9c3b-4855-8577-e7419d43be6b.jpg',
+  'images/82e0d378-d132-4813-88aa-904a420295c9.jpg',
+  'images/856b60e4-e8ea-498f-b683-1f44618b1863.jpg',
+  'images/885be6ec-2b72-4196-b3c2-38d36f6b06b0.jpg',
+  'images/929fe658-54a1-4928-bf73-2c55edba70b9.jpg',
+  'images/9ab342e7-9d6f-42e9-b8dd-64fb2acb1a60.jpg',
+  'images/9ba87d08-e615-4eff-91ba-885dbaa307b3.jpg',
+  'images/a44823b0-c35b-4176-b7c9-20994c9b9d92.jpg',
+  'images/a95a1fb4-3169-4703-b668-b058b1fd58d9.jpg',
+  'images/d8f78319-d38f-434a-b05d-da8f7e931937.jpg',
+  'images/e24057a4-303a-4307-953f-554f09151a12.jpg',
+  'images/ef25716f-fc97-49c9-a3b0-49c983348496.jpg',
+  'images/f277065c-8393-4085-bc63-e3657102ee5f.jpg',
   'images/2025-08-10 121906.png'
 ];
+// Use the same list for the gallery
+window.GALLERY_IMAGES = window.GALLERY_IMAGES || window.HERO_IMAGES;
 </script>
 <script src="script.js" defer></script>
 </body>

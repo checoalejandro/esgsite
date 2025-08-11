@@ -130,6 +130,21 @@ p { margin: 0 0 1rem; color: var(--muted); }
 .about-card { padding: 18px; }
 .about-card ul, .about-card ol { margin: 0; padding-left: 18px; color: var(--muted); }
 
+/* Gallery */
+.gallery .section-head p { color: var(--muted); }
+.gallery-wrap { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg); }
+.gallery-viewport { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #0a0a0a; }
+.gallery-viewport::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: inset 0 0 0 6px rgba(0,0,0,.85), inset 0 0 50px rgba(0,0,0,.6); }
+.gallery-track { position: relative; width: 100%; height: 100%; }
+.gallery-track .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; transition: opacity 600ms ease; }
+.gallery-track .slide.active { opacity: 1; }
+.gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 38px; height: 38px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.22); background: rgba(2,6,23,0.6); color: #fff; display: grid; place-items: center; cursor: pointer; transition: background .2s ease, transform .2s ease, opacity .2s ease; }
+.gallery-arrow:hover { background: rgba(2,6,23,0.8); }
+.gallery-arrow:active { transform: translateY(-50%) scale(0.98); }
+.gallery-arrow.prev { left: 10px; }
+.gallery-arrow.next { right: 10px; }
+@media (max-width: 540px) { .gallery-arrow { width: 34px; height: 34px; } }
+
 /* Contact */
 .contact-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
 .form { padding: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
@@ -211,10 +226,14 @@ input:focus, select:focus, textarea:focus { border-color: rgba(255,122,26,0.7); 
 }
 .hero::before {
   background-image: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('images/heavy_machine.png');
+  /* Nudge focal point upward so subject is better framed */
+  background-position: center 35%;
 }
 .services { position: relative; }
 .services::before {
   background-image: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('https://images.unsplash.com/photo-1565632830269-4f4b3f8711ee?auto=format&fit=crop&w=1600&q=80');
+  /* Slightly higher focal point for better composition in services section */
+  background-position: center 45%;
 }
 
 /* Mock logo presentation (black background logo) */
@@ -230,4 +249,24 @@ input:focus, select:focus, textarea:focus { border-color: rgba(255,122,26,0.7); 
   border-radius: inherit;
   object-fit: cover;
   background: #000; /* ensures black-backed mock integrates cleanly */
+}
+
+
+/* Intro landing overlay */
+.intro-overlay { position: fixed; inset: 0; background: #000; display: grid; place-items: center; z-index: 9999; opacity: 1; transition: opacity .6s ease; }
+.intro-overlay .intro-logo { width: min(340px, 65vw); max-width: 80vw; opacity: 0; transform: scale(.92); filter: drop-shadow(0 8px 24px rgba(0,0,0,.6)); animation: introLogoIn .9s cubic-bezier(.2,.8,.2,1) .15s forwards; }
+@keyframes introLogoIn { from { opacity: 0; transform: scale(.92);} to { opacity: 1; transform: scale(1);} }
+.intro-overlay.done { opacity: 0; pointer-events: none; }
+.intro-overlay.done .intro-logo { transition: transform .6s ease, filter .6s ease, opacity .6s ease; transform: scale(1.04); filter: blur(1px) drop-shadow(0 8px 24px rgba(0,0,0,.4)); opacity: .85; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-overlay { transition: none; }
+  .intro-overlay .intro-logo { animation: none; opacity: 1; transform: none; }
+}
+
+
+/* Responsive background position tuning for narrow screens */
+@media (max-width: 740px) {
+  .hero::before { background-position: center 22%; }
+  .services::before { background-position: center 35%; }
 }
